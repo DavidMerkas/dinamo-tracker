@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dinamo Zagreb · Rukomet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css?v=6" />
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="header-bg-circle header-bg-circle--1"></div>
+    <div class="header-bg-circle header-bg-circle--2"></div>
+    <div class="header-bg-circle header-bg-circle--3"></div>
+
+    <div class="header-inner">
+      <div class="header-top">
+        <div class="header-club">
+          <div class="header-badge">
+            <img src="/static/dinamo-logo.png" alt="Dinamo Zagreb" class="header-logo"
+                 onerror="this.style.display='none';this.nextElementSibling.style.display='grid'">
+            <span style="display:none;place-items:center;width:100%;height:100%;font-size:1.5rem">🤾</span>
+          </div>
+          <div class="header-info">
+            <h1 class="header-title">DINAMO</h1>
+            <p class="header-subtitle" id="header-subtitle">Zagreb</p>
+          </div>
+        </div>
+        <div class="header-right">
+          <button class="btn-refresh" id="btn-refresh" onclick="manualRefresh()">
+            <span class="refresh-icon">↻</span>
+            <span class="refresh-label">Osvježi</span>
+          </button>
+          <div class="header-updated">Osvježeno: <span id="last-updated">—</span></div>
+        </div>
+      </div>
+
+      <!-- Age group pills -->
+      <div class="pills" id="pills"></div>
+    </div>
+  </header>
+
+  <!-- QUICK STATS -->
+  <div class="quick-stats" id="quick-stats" style="display:none">
+    <div class="stat-item">
+      <span class="stat-value" id="stat-pos">—</span>
+      <span class="stat-label">Pozicija</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value" id="stat-pts">—</span>
+      <span class="stat-label">Bodovi</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value stat-value--win" id="stat-won">—</span>
+      <span class="stat-label">Pobjeda</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value stat-value--draw" id="stat-drawn">—</span>
+      <span class="stat-label">Neriješeno</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item">
+      <span class="stat-value stat-value--loss" id="stat-lost">—</span>
+      <span class="stat-label">Poraza</span>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat-item stat-item--forma">
+      <span class="stat-label">Forma</span>
+      <div class="forma" id="forma"></div>
+    </div>
+  </div>
+
+  <!-- TAB BAR (sticky) -->
+  <nav class="tab-bar" id="tab-bar">
+    <button class="tab-btn active" data-tab="rezultati" onclick="switchMainTab('rezultati')">Rezultati</button>
+    <button class="tab-btn" data-tab="tablica"   onclick="switchMainTab('tablica')">Tablica</button>
+    <button class="tab-btn" data-tab="raspored"  onclick="switchMainTab('raspored')">Raspored</button>
+  </nav>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <div id="loading" class="loading">
+      <div class="spinner"></div>
+      <p>Učitavanje…</p>
+    </div>
+    <div id="content" class="hidden"></div>
+    <div id="error" class="error-box hidden"></div>
+  </main>
+
+  <div class="last-updated-bar">
+    Made by Čupko
+  </div>
+
+  <script src="/static/app.js?v=9"></script>
+</body>
+</html>

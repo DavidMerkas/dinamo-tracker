@@ -1,0 +1,531 @@
+/* ── Reset & base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:            #f0f2f5;
+  --card:          #ffffff;
+  --card-border:   #e5e7eb;
+  --header-bg:     #0f1d3d;
+  --header-border: #1a2f5a;
+  --accent:        #1d4ed8;
+  --accent-light:  #eff6ff;
+  --accent-border: #bfdbfe;
+  --text:          #111827;
+  --text-sec:      #374151;
+  --text-muted:    #9ca3af;
+  --win-bg:        #16a34a;
+  --loss-bg:       #dc2626;
+  --draw-bg:       #d97706;
+  --home-text:     #1d4ed8;
+  --away-text:     #7c3aed;
+  --shadow:        0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md:     0 4px 6px rgba(0,0,0,.07), 0 2px 4px rgba(0,0,0,.04);
+  --radius:        6px;
+  --radius-sm:     4px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Outfit', Verdana, system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ── */
+.header {
+  background: var(--header-bg);
+  border-bottom: 3px solid var(--accent);
+  padding: 1rem 1.25rem .9rem;
+  position: relative;
+}
+
+/* remove old decorative circles */
+.header-bg-circle { display: none; }
+
+.header-inner {
+  max-width: 700px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .85rem;
+}
+
+.header-club { display: flex; align-items: center; gap: .75rem; }
+
+.header-badge {
+  width: 52px; height: 52px;
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+
+.header-logo {
+  width: 52px; height: 52px;
+  object-fit: contain;
+}
+
+.header-title {
+  font-size: 1.5rem;
+  font-weight: 900;
+  letter-spacing: .06em;
+  color: #fff;
+  line-height: 1;
+}
+
+.header-subtitle {
+  font-size: .78rem;
+  font-weight: 400;
+  color: rgba(255,255,255,.55);
+  margin-top: .2rem;
+}
+
+.header-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: .3rem;
+  flex-shrink: 0;
+}
+
+.header-updated {
+  font-size: .65rem;
+  color: rgba(255,255,255,.4);
+  white-space: nowrap;
+}
+
+.btn-refresh {
+  display: flex;
+  align-items: center;
+  gap: .35rem;
+  background: rgba(255,255,255,.1);
+  border: 1px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.85);
+  padding: .45rem .9rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-family: 'Outfit', Verdana, sans-serif;
+  font-size: .8rem;
+  font-weight: 600;
+  transition: background .15s;
+  flex-shrink: 0;
+}
+.btn-refresh:hover    { background: rgba(255,255,255,.18); color: #fff; }
+.btn-refresh:disabled { opacity: .4; cursor: not-allowed; }
+.refresh-icon { font-size: .95rem; }
+
+/* Pills */
+.pills {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
+
+.pill {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.15);
+  color: rgba(255,255,255,.65);
+  padding: .3rem .9rem;
+  border-radius: var(--radius-sm);
+  font-family: 'Outfit', Verdana, sans-serif;
+  font-size: .78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.pill:hover  { background: rgba(255,255,255,.15); color: #fff; }
+.pill.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── Quick stats ── */
+.quick-stats {
+  background: #fff;
+  border-bottom: 1px solid var(--card-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  padding: .55rem 1rem;
+  overflow-x: auto;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 1rem;
+  gap: .1rem;
+}
+.stat-item--wide  { padding: 0 1.2rem; }
+.stat-item--forma { flex-direction: row; align-items: center; gap: .5rem; padding: 0 1rem; }
+
+.stat-value {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--text);
+  white-space: nowrap;
+}
+.stat-value--win  { color: var(--win-bg);  }
+.stat-value--draw { color: var(--draw-bg); }
+.stat-value--loss { color: var(--loss-bg); }
+
+.stat-label {
+  font-size: .64rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  white-space: nowrap;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 26px;
+  background: var(--card-border);
+  flex-shrink: 0;
+}
+
+/* Forma squares */
+.forma { display: flex; gap: .2rem; align-items: center; }
+
+.forma-sq {
+  width: 20px; height: 20px;
+  border-radius: 3px;
+  display: grid; place-items: center;
+  font-size: .62rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+.forma-sq--win  { background: var(--win-bg); }
+.forma-sq--draw { background: var(--draw-bg); }
+.forma-sq--loss { background: var(--loss-bg); }
+
+/* ── Tab bar ── */
+.tab-bar {
+  display: flex;
+  background: #fff;
+  border-bottom: 1px solid var(--card-border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 1.25rem;
+  max-width: 100%;
+  box-shadow: 0 2px 4px rgba(0,0,0,.05);
+}
+
+.tab-btn {
+  flex: 1;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--text-muted);
+  padding: .8rem .5rem;
+  font-family: 'Outfit', Verdana, sans-serif;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all .15s;
+  white-space: nowrap;
+}
+.tab-btn:hover  { color: var(--text-sec); }
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ── Main content ── */
+.main {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 1rem 1.25rem;
+}
+
+/* ── Section label ── */
+.section-label {
+  font-size: .7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--text-muted);
+  padding: .8rem 0 .35rem;
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: .5rem;
+}
+
+/* ── Match card (Rezultati) ── */
+.match-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: .75rem 1rem;
+  margin-bottom: .45rem;
+  box-shadow: var(--shadow);
+  transition: box-shadow .15s;
+}
+.match-card:hover { box-shadow: var(--shadow-md); }
+.match-card--dinamo {
+  border-left: 3px solid var(--accent);
+}
+
+.match-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .5rem;
+}
+
+.match-round {
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+}
+
+.match-badges { display: flex; align-items: center; gap: .3rem; }
+
+.badge {
+  padding: .15rem .5rem;
+  border-radius: var(--radius-sm);
+  font-size: .65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .04em;
+}
+.badge--win  { background: var(--win-bg);  color: #fff; }
+.badge--draw { background: var(--draw-bg); color: #fff; }
+.badge--loss { background: var(--loss-bg); color: #fff; }
+.badge--home { background: #dbeafe; color: #1d4ed8; }
+.badge--away { background: #ede9fe; color: #7c3aed; }
+
+.match-body {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: .5rem;
+}
+
+.match-team {
+  font-size: .88rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+}
+.match-team--home { text-align: right; }
+.match-team--away { text-align: left; }
+.match-team--dinamo { color: var(--home-text); }
+
+.match-score {
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: var(--text);
+  letter-spacing: .02em;
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: .25rem .65rem;
+  min-width: 68px;
+}
+
+/* ── Standings table ── */
+.standings-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .82rem;
+}
+
+.standings-table thead th {
+  background: var(--header-bg);
+  color: rgba(255,255,255,.75);
+  padding: .55rem .7rem;
+  text-align: center;
+  font-size: .67rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  white-space: nowrap;
+}
+.standings-table thead th.left { text-align: left; }
+
+.standings-table tbody tr {
+  border-bottom: 1px solid var(--card-border);
+  transition: background .1s;
+}
+.standings-table tbody tr:last-child { border-bottom: none; }
+.standings-table tbody tr:hover { background: #f9fafb; }
+
+.standings-table tbody tr.dinamo-row {
+  background: var(--accent-light);
+}
+.standings-table tbody tr.dinamo-row td.left { color: var(--accent); }
+
+.standings-table tbody td {
+  padding: .6rem .7rem;
+  text-align: center;
+  color: var(--text-sec);
+}
+.standings-table tbody td.left { text-align: left; font-weight: 700; color: var(--text); }
+.standings-table tbody td.pts  { font-weight: 800; color: var(--text); }
+
+.rank-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  font-size: .72rem;
+  font-weight: 800;
+  background: #f3f4f6;
+  color: var(--text-muted);
+}
+.rank-num--top { background: var(--accent); color: #fff; }
+
+/* ── Schedule (Raspored) ── */
+.schedule-card {
+  background: var(--card);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius);
+  padding: .75rem 1rem;
+  margin-bottom: .45rem;
+  box-shadow: var(--shadow);
+  transition: box-shadow .15s;
+}
+.schedule-card:hover { box-shadow: var(--shadow-md); }
+.schedule-card--dinamo { border-left: 3px solid var(--accent); }
+.schedule-card--next   {
+  border-left: 3px solid var(--accent);
+  background: var(--accent-light);
+}
+
+.schedule-next-label {
+  font-size: .65rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--accent);
+  margin-bottom: .45rem;
+  display: flex;
+  align-items: center;
+  gap: .3rem;
+}
+.schedule-next-label::before {
+  content: '';
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: blink 1.2s ease infinite;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+.schedule-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .5rem;
+}
+
+.schedule-datetime {
+  font-size: .76rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+.schedule-datetime span { color: var(--text); }
+
+.schedule-body {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: .5rem;
+  margin-bottom: .35rem;
+}
+
+.schedule-team {
+  font-size: .88rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--text);
+}
+.schedule-team--home   { text-align: right; }
+.schedule-team--away   { text-align: left; }
+.schedule-team--dinamo { color: var(--home-text); }
+
+.schedule-vs {
+  text-align: center;
+  font-size: .72rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  background: var(--bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-sm);
+  padding: .35rem .55rem;
+  min-width: 40px;
+}
+
+.schedule-venue {
+  font-size: .7rem;
+  color: var(--text-muted);
+  margin-top: .1rem;
+}
+
+/* ── States ── */
+.loading {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-muted);
+}
+.spinner {
+  width: 34px; height: 34px;
+  border: 3px solid var(--card-border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  margin: 0 auto 1rem;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.hidden { display: none !important; }
+
+.empty {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-muted);
+  font-size: .88rem;
+}
+
+.error-box {
+  background: #fee2e2;
+  border: 1px solid #fca5a5;
+  border-radius: var(--radius);
+  padding: .9rem 1.1rem;
+  color: #b91c1c;
+  font-size: .85rem;
+}
+
+/* ── Footer ── */
+.last-updated-bar {
+  text-align: center;
+  padding: .75rem;
+  font-size: .7rem;
+  color: var(--text-muted);
+  border-top: 1px solid var(--card-border);
+  background: var(--card);
+  margin-top: 1rem;
+}
+
+/* ── Refresh animation ── */
+.refreshing .refresh-icon { display: inline-block; animation: spin .7s linear infinite; }
