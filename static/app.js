@@ -6,6 +6,8 @@ const CLUB_KEYWORDS = ["dinamo zagreb", "dinamo"];
 let allData    = [];
 let activeAge  = 0;   // index into allData
 let activeTab  = "rezultati"; // "rezultati" | "tablica" | "raspored"
+let lastManualRefresh = 0;
+const REFRESH_COOLDOWN_MS = 5 * 60 * 1000; // 5 minuta
 
 /* ── Init ── */
 document.addEventListener("DOMContentLoaded", loadData);
@@ -29,6 +31,18 @@ async function loadData() {
 }
 
 async function manualRefresh() {
+  const now = Date.now();
+  const elapsed = now - lastManualRefresh;
+  if (elapsed < REFRESH_COOLDOWN_MS) {
+    const remaining = Math.ceil((REFRESH_COOLDOWN_MS - elapsed) / 1000);
+    const min = Math.floor(remaining / 60);
+    const sec = remaining % 60;
+    const label = min > 0 ? `${min}m ${sec}s` : `${sec}s`;
+    showError(`Možeš osvježiti jednom svakih 5 minuta. Pokušaj za ${label}.`);
+    return;
+  }
+  lastManualRefresh = now;
+
   const btn = document.getElementById("btn-refresh");
   btn.disabled = true;
   document.body.classList.add("refreshing");

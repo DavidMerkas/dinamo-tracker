@@ -1,6 +1,6 @@
 import aiosqlite
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 
 DB_PATH = os.path.join(os.path.dirname(__file__), "data.db")
 
@@ -64,7 +64,7 @@ async def init_db():
 
 
 async def save_competition_data(natjecanje_id: int, standings: list, matches: list):
-    now = datetime.now().isoformat(timespec="seconds")
+    now = datetime.now(timezone.utc).isoformat(timespec="seconds")
     async with aiosqlite.connect(DB_PATH) as db:
         # Clear old data
         await db.execute("DELETE FROM standings WHERE natjecanje_id = ?", (natjecanje_id,))
