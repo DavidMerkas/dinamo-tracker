@@ -3,11 +3,10 @@ const CLUB = "Dinamo Zagreb";
 const CLUB_KEYWORDS = ["dinamo zagreb", "dinamo"];
 
 /* ── State ── */
-let allData    = [];
-let activeAge  = 0;   // index into allData
-let activeTab  = "rezultati"; // "rezultati" | "tablica" | "raspored"
-let lastManualRefresh = 0;
-const REFRESH_COOLDOWN_MS = 5 * 60 * 1000; // 5 minuta
+let allData   = [];
+let activeAge = 0;
+let activeTab = "rezultati";
+let cooldownTimer = null;
 
 /* ── Init ── */
 document.addEventListener("DOMContentLoaded", loadData);
@@ -31,31 +30,54 @@ async function loadData() {
 }
 
 async function manualRefresh() {
-  const now = Date.now();
-  const elapsed = now - lastManualRefresh;
-  if (elapsed < REFRESH_COOLDOWN_MS) {
-    const remaining = Math.ceil((REFRESH_COOLDOWN_MS - elapsed) / 1000);
-    const min = Math.floor(remaining / 60);
-    const sec = remaining % 60;
-    const label = min > 0 ? `${min}m ${sec}s` : `${sec}s`;
-    showError(`Možeš osvježiti jednom svakih 5 minuta. Pokušaj za ${label}.`);
-    return;
-  }
-  lastManualRefresh = now;
-
   const btn = document.getElementById("btn-refresh");
   btn.disabled = true;
   document.body.classList.add("refreshing");
+  hideError();
   try {
-    await fetch("/api/refresh", { method: "POST" });
+    const res = await fetch("/api/refresh", { method: "POST" });
+    if (res.status === 429) {
+      const body = await res.json();
+      const secs = body.detail?.retry_after ?? 300;
+      startCooldownDisplay(secs);
+      return;
+    }
+    if (res.status === 409) return; // već u tijeku
     await pollUntilUpdated(90);
     await loadData();
+    startCooldownDisplay(300); // 5 min nakon uspješnog refresha
   } catch (e) {
     showError("Osvježavanje nije uspjelo: " + e.message);
   } finally {
     btn.disabled = false;
     document.body.classList.remove("refreshing");
   }
+}
+
+function startCooldownDisplay(seconds) {
+  const el = document.getElementById("refresh-cooldown");
+  const btn = document.getElementById("btn-refresh");
+  if (cooldownTimer) clearInterval(cooldownTimer);
+  let remaining = seconds;
+
+  function update() {
+    if (remaining <= 0) {
+      clearInterval(cooldownTimer);
+      cooldownTimer = null;
+      el.classList.add("hidden");
+      btn.disabled = false;
+      return;
+    }
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+    el.textContent = `${m}:${s.toString().padStart(2, "0")}`;
+    el.classList.remove("hidden");
+    btn.disabled = true;
+    remaining--;
+  }
+
+  update();
+  cooldownTimer = setInterval(update, 1000);
 }
 
 async function pollUntilUpdated(maxSeconds) {
@@ -264,7 +286,6 @@ function buildTablica(comp) {
         <th title="Pobjede">P</th>
         <th title="Neriješeno">N</th>
         <th title="Izgubili">G</th>
-        <th title="Golovi">Gol</th>
         <th>Bod</th>
       </tr>
     </thead>`;
@@ -285,7 +306,6 @@ function buildTablica(comp) {
       <td>${row.won ?? "—"}</td>
       <td>${row.drawn ?? "—"}</td>
       <td>${row.lost ?? "—"}</td>
-      <td>${row.goals_for != null ? row.goals_for + ":" + row.goals_against : "—"}</td>
       <td class="pts">${row.points ?? "—"}</td>`;
 
     tbody.appendChild(tr);

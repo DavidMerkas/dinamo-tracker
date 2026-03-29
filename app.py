@@ -3,6 +3,7 @@ import logging
 import os
 import subprocess
 import sys
+import time
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, HTTPException
@@ -30,7 +31,9 @@ scheduler = AsyncIOScheduler()
 # so Playwright gets its own process/event loop
 # ──────────────────────────────────────────────
 
-_refresh_lock = asyncio.Lock()
+_refresh_lock            = asyncio.Lock()
+_last_manual_refresh     = 0.0
+MANUAL_REFRESH_COOLDOWN  = 5 * 60  # sekundi
 
 
 async def refresh_data():
@@ -93,8 +96,17 @@ async def api_data():
 
 @app.post("/api/refresh")
 async def api_refresh():
+    global _last_manual_refresh
+    elapsed = time.time() - _last_manual_refresh
+    if elapsed < MANUAL_REFRESH_COOLDOWN:
+        retry_after = int(MANUAL_REFRESH_COOLDOWN - elapsed)
+        raise HTTPException(
+            status_code=429,
+            detail={"reason": "rate_limited", "retry_after": retry_after},
+        )
     if _refresh_lock.locked():
         raise HTTPException(status_code=409, detail="Refresh already in progress.")
+    _last_manual_refresh = time.time()
     asyncio.create_task(refresh_data())
     return {"status": "started"}
 

@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css?v=7" />
+  <link rel="stylesheet" href="/static/style.css?v=8" />
 </head>
 <body>
 
@@ -31,10 +31,13 @@
           </div>
         </div>
         <div class="header-right">
-          <button class="btn-refresh" id="btn-refresh" onclick="manualRefresh()">
-            <span class="refresh-icon">↻</span>
-            <span class="refresh-label">Osvježi</span>
-          </button>
+          <div class="refresh-row">
+            <button class="btn-refresh" id="btn-refresh" onclick="manualRefresh()">
+              <span class="refresh-icon">↻</span>
+              <span class="refresh-label">Osvježi</span>
+            </button>
+            <span class="refresh-cooldown hidden" id="refresh-cooldown"></span>
+          </div>
           <div class="header-updated">Osvježeno: <span id="last-updated">—</span></div>
         </div>
       </div>
@@ -98,6 +101,6 @@
     Made by Čupko
   </div>
 
-  <script src="/static/app.js?v=10"></script>
+  <script src="/static/app.js?v=11"></script>
 </body>
 </html>

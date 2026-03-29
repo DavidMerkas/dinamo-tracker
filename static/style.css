@@ -95,6 +95,19 @@ body {
   flex-shrink: 0;
 }
 
+.refresh-row {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+
+.refresh-cooldown {
+  font-size: .72rem;
+  font-weight: 700;
+  color: rgba(255,255,255,.45);
+  white-space: nowrap;
+}
+
 .header-updated {
   font-size: .65rem;
   color: rgba(255,255,255,.4);
