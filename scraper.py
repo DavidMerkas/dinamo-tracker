@@ -45,6 +45,10 @@ def _fetch_js(natjecanje_id: int) -> dict:
     text = r.text.strip()
     if text.startswith("var "):
         text = re.sub(r"^var\s+\w+\s*=\s*", "", text).rstrip(";").strip()
+    # Quote any unquoted JS object keys (e.g. poredakkraj: [...])
+    text = re.sub(r'(?<!["\w])([a-zA-Z_]\w*)\s*(?=:(?!:))', r'"\1"', text)
+    # Fix leading-zero integers invalid in JSON (e.g. 09 → 9)
+    text = re.sub(r'(?<=[:\[,\s])0+([1-9]\d*)(?=[\s,\]\}])', r'\1', text)
     return chompjs.parse_js_object(text)
 
 

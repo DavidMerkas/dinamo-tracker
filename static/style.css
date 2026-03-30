@@ -167,6 +167,12 @@ body {
   gap: 0;
   padding: .55rem 1rem;
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  min-width: 0;
+}
+
+.quick-stats > * {
+  flex-shrink: 0;
 }
 
 .stat-item {
@@ -493,7 +499,8 @@ body {
 .schedule-venue {
   font-size: .7rem;
   color: var(--text-muted);
-  margin-top: .1rem;
+  margin-top: .25rem;
+  text-align: center;
 }
 
 /* ── States ── */

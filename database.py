@@ -45,6 +45,7 @@ CREATE TABLE IF NOT EXISTS matches (
 COMPETITIONS_SEED = [
     (1677, "3. HRL Središte – M", "Seniori"),
     (1705, "1. HRL U17 – M",      "U17"),
+    (1763, "2. HRL U17 – M",      "U17 2L"),
     (1706, "1. HRL U15 – M",      "U15"),
     (1707, "1. HRL U13 – M",      "U13"),
 ]

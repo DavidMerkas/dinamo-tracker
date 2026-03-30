@@ -397,7 +397,7 @@ function scheduleCard(m, isNext) {
   if (m.venue) {
     const venue = document.createElement("div");
     venue.className = "schedule-venue";
-    venue.textContent = "📍 " + m.venue;
+    venue.textContent = m.venue;
     card.appendChild(venue);
   }
 
