@@ -150,7 +150,7 @@ function renderQuickStats(comp) {
   const myRow = comp.standings.find(s => isDinamo(s.team));
 
   if (!myRow) { qs.style.display = "none"; return; }
-  qs.style.display = "flex";
+  qs.style.display = "block";
 
   document.getElementById("stat-pos").textContent    = "#" + (myRow.rank ?? "—");
   document.getElementById("stat-pts").textContent    = (myRow.points ?? "—") + " bod.";
@@ -285,7 +285,7 @@ function buildTablica(comp) {
         <th title="Utakmice">U</th>
         <th title="Pobjede">P</th>
         <th title="Neriješeno">N</th>
-        <th title="Izgubili">G</th>
+        <th title="Izgubili">I</th>
         <th>Bod</th>
       </tr>
     </thead>`;
@@ -442,7 +442,7 @@ function matchResult(m) {
   if (myScore == null) return { label: "—", cls: "loss" };
   if (myScore > oppScore)  return { label: "P", cls: "win" };
   if (myScore === oppScore) return { label: "N", cls: "draw" };
-  return { label: "G", cls: "loss" };
+  return { label: "I", cls: "loss" };
 }
 
 function mkBadge(text, type) {

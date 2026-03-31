@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS competitions (
     natjecanje_id INTEGER PRIMARY KEY,
     name          TEXT NOT NULL,
     category      TEXT NOT NULL,
-    last_updated  TEXT
+    last_updated  TEXT,
+    sort_order    INTEGER DEFAULT 99
 );
 
 CREATE TABLE IF NOT EXISTS standings (
@@ -42,12 +43,13 @@ CREATE TABLE IF NOT EXISTS matches (
 );
 """
 
+# (natjecanje_id, name, category, sort_order)
 COMPETITIONS_SEED = [
-    (1677, "3. HRL Središte – M", "Seniori"),
-    (1705, "1. HRL U17 – M",      "U17"),
-    (1763, "2. HRL U17 – M",      "U17 2L"),
-    (1706, "1. HRL U15 – M",      "U15"),
-    (1707, "1. HRL U13 – M",      "U13"),
+    (1677, "3. HRL Središte – M", "Seniori", 0),
+    (1705, "1. HRL U17 – M",      "U17",     1),
+    (1763, "2. HRL U17 – M",      "U17 2L",  2),
+    (1706, "1. HRL U15 – M",      "U15",     3),
+    (1707, "1. HRL U13 – M",      "U13",     4),
 ]
 
 CLUB_NAME = "Dinamo Zagreb"
@@ -56,10 +58,20 @@ CLUB_NAME = "Dinamo Zagreb"
 async def init_db():
     async with aiosqlite.connect(DB_PATH) as db:
         await db.executescript(CREATE_TABLES)
-        for nat_id, name, category in COMPETITIONS_SEED:
+        # Migration: add sort_order column if it doesn't exist yet
+        try:
+            await db.execute("ALTER TABLE competitions ADD COLUMN sort_order INTEGER DEFAULT 99")
+        except Exception:
+            pass  # column already exists
+
+        for nat_id, name, category, sort_order in COMPETITIONS_SEED:
             await db.execute(
-                "INSERT OR IGNORE INTO competitions (natjecanje_id, name, category) VALUES (?, ?, ?)",
-                (nat_id, name, category),
+                "INSERT OR IGNORE INTO competitions (natjecanje_id, name, category, sort_order) VALUES (?, ?, ?, ?)",
+                (nat_id, name, category, sort_order),
+            )
+            await db.execute(
+                "UPDATE competitions SET sort_order = ? WHERE natjecanje_id = ?",
+                (sort_order, nat_id),
             )
         await db.commit()
 
@@ -122,7 +134,7 @@ async def get_all_data() -> list:
         db.row_factory = aiosqlite.Row
         result = []
 
-        async with db.execute("SELECT * FROM competitions ORDER BY natjecanje_id") as cur:
+        async with db.execute("SELECT * FROM competitions ORDER BY sort_order, natjecanje_id") as cur:
             competitions = await cur.fetchall()
 
         for comp in competitions:

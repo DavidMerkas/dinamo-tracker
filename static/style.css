@@ -161,14 +161,17 @@ body {
 .quick-stats {
   background: #fff;
   border-bottom: 1px solid var(--card-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  padding: .55rem 1rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
-  min-width: 0;
+  padding: .55rem 0;
+}
+
+.quick-stats-inner {
+  display: inline-flex;
+  align-items: center;
+  min-width: 100%;
+  justify-content: center;
+  padding: 0 1rem;
 }
 
 .quick-stats > * {

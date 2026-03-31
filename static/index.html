@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/static/style.css?v=9" />
+  <link rel="stylesheet" href="/static/style.css?v=10" />
 </head>
 <body>
 
@@ -49,34 +49,36 @@
 
   <!-- QUICK STATS -->
   <div class="quick-stats" id="quick-stats" style="display:none">
-    <div class="stat-item">
-      <span class="stat-value" id="stat-pos">—</span>
-      <span class="stat-label">Pozicija</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value" id="stat-pts">—</span>
-      <span class="stat-label">Bodovi</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value stat-value--win" id="stat-won">—</span>
-      <span class="stat-label">Pobjeda</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value stat-value--draw" id="stat-drawn">—</span>
-      <span class="stat-label">Neriješeno</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item">
-      <span class="stat-value stat-value--loss" id="stat-lost">—</span>
-      <span class="stat-label">Poraza</span>
-    </div>
-    <div class="stat-divider"></div>
-    <div class="stat-item stat-item--forma">
-      <span class="stat-label">Forma</span>
-      <div class="forma" id="forma"></div>
+    <div class="quick-stats-inner">
+      <div class="stat-item">
+        <span class="stat-value" id="stat-pos">—</span>
+        <span class="stat-label">Pozicija</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value" id="stat-pts">—</span>
+        <span class="stat-label">Bodovi</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value stat-value--win" id="stat-won">—</span>
+        <span class="stat-label">Pobjeda</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value stat-value--draw" id="stat-drawn">—</span>
+        <span class="stat-label">Neriješeno</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item">
+        <span class="stat-value stat-value--loss" id="stat-lost">—</span>
+        <span class="stat-label">Izgubljeno</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat-item stat-item--forma">
+        <span class="stat-label">Forma</span>
+        <div class="forma" id="forma"></div>
+      </div>
     </div>
   </div>
 
@@ -101,6 +103,6 @@
     Made by Čupko
   </div>
 
-  <script src="/static/app.js?v=12"></script>
+  <script src="/static/app.js?v=14"></script>
 </body>
 </html>
